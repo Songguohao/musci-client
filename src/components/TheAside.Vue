@@ -1,7 +1,13 @@
 <template>
   <transition name="slide-fade">
     <div class="the-aside" v-if="showAside">
-      歌单列表
+      <h2 class="title">播放列表</h2>
+      <ul class="menus">
+        <li v-for="(item, index) in listOfSongs" :key="index" :class="{'is-play': id===item.id}"
+        @click="toplay(item.id, item.url, item.img, index, item.name, item.singerName, item.lyric)">
+          {{ item.name }}
+        </li>
+      </ul>
     </div>
   </transition>
 </template>
@@ -16,7 +22,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'showAside'
+      'showAside', // 是否显示播放中的歌曲列表
+      'listOfSongs', // 当前歌曲列表
+      'id' // 播放中的音乐id
     ])
   },
   mounted () {
@@ -27,6 +35,18 @@ export default {
   },
   components: {
 
+  },
+  methods: {
+    // 播放歌曲
+    toplay: function (id, url, pic, index, name, artist, lyric) {
+      this.$store.commit('setId', id)
+      this.$store.commit('setUrl', this.$store.state.HOST + url)
+      this.$store.commit('setPicUrl', pic)
+      this.$store.commit('setListIndex', index)
+      this.$store.commit('setTitle', name)
+      this.$store.commit('setArtist', artist)
+      this.$store.commit('setLyric', lyric)
+    }
   }
 }
 </script>

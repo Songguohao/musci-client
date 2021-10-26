@@ -2,7 +2,7 @@
   <div class="play-bar">
     <div class="kongjian">
       <!-- 上一首歌 -->
-      <div class="item">
+      <div class="item" @click="prev">
         <Icon type="ios-rewind-outline" style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
       <!-- 播放 -->
@@ -11,7 +11,7 @@
         <Icon type="ios-play" v-else style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
       <!-- 下一首歌 -->
-      <div class="item">
+      <div class="item" @click="next">
         <Icon type="ios-fastforward-outline" style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
       <!-- 歌曲图片 -->
@@ -103,7 +103,10 @@ export default {
       'autoNext',
       'artist',
       'title',
-      'picUrl'
+      'picUrl',
+      'listIndex', // 当前歌曲在歌单中的位置
+      'listOfSongs',
+      'autoNext'
     ])
   },
   watch: {
@@ -115,8 +118,11 @@ export default {
     // 音量变化
     volume () {
       this.$store.commit('setVolume', this.volume / 100)
+    },
+    // 自动播放下一首
+    autoNext () {
+      this.next()
     }
-
   },
   methods: {
     // 控制音乐播放暂停
@@ -213,6 +219,40 @@ export default {
     // 显示播放中的歌曲列表
     changeAside () {
       this.$store.commit('setShowAside', true)
+    },
+    // 上一首歌曲
+    prev () {
+      // 当前处于不可能状态或者只有一首音乐的时候不执行
+      if (this.listIndex !== -1 || this.listOfSongs.length > 1) {
+        if (this.listIndex > 0) { // 不是第一首音乐
+          this.$store.commit('setListIndex', this.listIndex - 1)
+        } else { // 第一首音乐，切换到倒数第一首
+          this.$store.commit('setListIndex', this.listOfSongs.length - 1)
+        }
+        this.toplay(this.listOfSongs[this.listIndex].url)
+      }
+    },
+    // 下一首歌曲
+    next () {
+      if (this.listIndex !== -1 || this.listOfSongs.length > 1) {
+        if (this.listIndex < this.listOfSongs.length - 1) {
+          this.$store.commit('setListIndex', this.listIndex + 1)
+        } else { // 最后一首，切换到第一首
+          this.$store.commit('setListIndex', 0)
+        }
+        this.toplay(this.listOfSongs[this.listIndex].url)
+      }
+    },
+    // 播放歌曲
+    toplay: function (url) {
+      if (url && url !== this.url) {
+        this.$store.commit('setId', this.listOfSongs[this.listIndex].id)
+        this.$store.commit('setUrl', this.$store.state.HOST + url)
+        this.$store.commit('setPicUrl', this.listOfSongs[this.listIndex].img)
+        this.$store.commit('setTitle', this.listOfSongs[this.listIndex].name)
+        this.$store.commit('setArtist', this.listOfSongs[this.listIndex].singerName)
+        this.$store.commit('setLyric', this.listOfSongs[this.listIndex].lyric)
+      }
     }
   }
 }

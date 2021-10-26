@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     lyric: [], // 未处理的歌词
     tempList: {}, // 单个歌单信息
     listIndex: null, // 当前歌曲在歌单中的位置
-    volume: 50 // 音量
+    volume: 100 // 音量
   },
   getters: {
     isPlay: state => state.isPlay,
