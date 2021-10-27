@@ -1,5 +1,9 @@
 <template>
-  <div class="play-bar">
+  <div class="play-bar" :class="{show:!toggle}">
+    <div @click="toggle=!toggle" class="item-up">
+      <Icon v-if="toggle" type="ios-arrow-down"></Icon>
+      <Icon v-else type="ios-arrow-up"></Icon>
+    </div>
     <div class="kongjian">
       <!-- 上一首歌 -->
       <div class="item" @click="prev">
@@ -15,7 +19,7 @@
         <Icon type="ios-fastforward-outline" style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
       <!-- 歌曲图片 -->
-      <div class="item-img" >
+      <div class="item-img" @click="tolyric">
         <img :src="attachImageUrl (picUrl)"/>
       </div>
       <!-- 播放进度 -->
@@ -50,7 +54,7 @@
         <Icon type="ios-heart-outline" style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
       <!-- 下载 -->
-      <div class="item">
+      <div class="item" @click="download">
         <Icon type="ios-download" style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
       <!-- 播放列表 -->
@@ -63,6 +67,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { download } from '../api/index.js'
 export default {
   name: 'PlayBar',
   data () {
@@ -73,7 +78,8 @@ export default {
       progressLength: 0, // 进度条总长度
       mouseStartX: 0, // 鼠标拖拽开始位置
       tag: false, // 拖拽开始结束的标志，当开始拖拽它的值才变为true
-      volume: 50
+      volume: 100,
+      toggle: true // 显示隐藏界面
     }
   },
   // 生命周期 - 创建完成（访问当前this实例）
@@ -170,6 +176,38 @@ export default {
       }
       return result
     },
+    // 解析歌词
+    parseLyric (text) {
+      let lines = text.split('\n')
+      let pattern = /\[\d{2}:\d{2}.(\d{3}|\d{2})]/g
+      let result = []
+      // 对于歌词格式不对的直接返回
+      if (!(/\[.+\]/.test(text))) {
+        return [[0, text]]
+      }
+      // 去掉格式不正确的行
+      while (!pattern.test(lines[0])) {
+        lines = lines.slice(1)
+      }
+      // 遍历每一行，形成一个带着两元素的数组，第一个元素是时间，第二个是歌词
+      for (let item of lines) {
+        if (item) {
+          let time = item.match(pattern) // 存前面的时间段
+          let value = item.replace(pattern, '') // 存后面的歌词
+          for (let item1 of time) {
+            let t = item1.slice(1, -1).split(':') // 取出时间
+            if (value !== '') {
+              result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value])
+            }
+          }
+        }
+      }
+      // 按照第一个元素的时间进行排序
+      result.sort(function (a, b) {
+        return a[0] - b[0]
+      })
+      return result
+    },
     // 拖拽开始
     mousedown (e) {
       this.mouseStartX = e.clientX
@@ -244,15 +282,40 @@ export default {
       }
     },
     // 播放歌曲
-    toplay: function (url) {
+    toplay (url) {
       if (url && url !== this.url) {
         this.$store.commit('setId', this.listOfSongs[this.listIndex].id)
         this.$store.commit('setUrl', this.$store.state.HOST + url)
         this.$store.commit('setPicUrl', this.listOfSongs[this.listIndex].img)
         this.$store.commit('setTitle', this.listOfSongs[this.listIndex].name)
         this.$store.commit('setArtist', this.listOfSongs[this.listIndex].singerName)
-        this.$store.commit('setLyric', this.listOfSongs[this.listIndex].lyric)
+        let lyric = this.listOfSongs[this.listIndex].lyric
+        this.$store.commit('setLyric', this.parseLyric(lyric))
       }
+    },
+    // 跳转歌词页面
+    tolyric () {
+      this.$router.push({path: `/lyric`})
+    },
+    // 下载音乐
+    download () {
+      download(this.url).then(res => {
+        let content = res.data
+        let eleLink = document.createElement('a')
+        eleLink.download = `${this.artist}-${this.title}.mp3`
+        eleLink.style.display = 'none'
+        // 把字符内容转换秤砣blob地址
+        let blob = new Blob([content])
+        eleLink.href = URL.createObjectURL(blob)
+        // 把链接地址加到document里
+        document.body.appendChild(eleLink)
+        // 触发点击
+        eleLink.click()
+        // 然后移除新加的控件
+        document.body.removeChild(eleLink)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }

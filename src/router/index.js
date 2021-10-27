@@ -5,6 +5,7 @@ import MyMusic from '@/pages/MyMusic'
 import Singer from '@/pages/Singer'
 import SongList from '@/pages/SongList'
 import Search from '@/pages/Search'
+import Lyric from '@/pages/Lyric'
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: Search
+    },
+    {
+      path: '/lyric',
+      name: 'lyric',
+      component: Lyric
     }
   ]
 })

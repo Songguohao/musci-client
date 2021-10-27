@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { post, get } from './http'
 
 // 添加歌手
@@ -57,3 +58,10 @@ export const getAllConsumer = () => get(`consumer/allConsumer`)
 
 // 根据歌手id查询歌手
 export const getConsumer = (id) => get(`consumer/selectByPrimaryKey?id=${id}`)
+
+// 下载音乐
+export const download = (url) => axios({
+  method: 'get',
+  url: url,
+  responseType: 'blob'
+})

@@ -31,7 +31,7 @@ export const mixin = {
       this.$store.commit('setListIndex', index)
       this.$store.commit('setTitle', name)
       this.$store.commit('setArtist', artist)
-      this.$store.commit('setLyric', lyric)
+      this.$store.commit('setLyric', this.parseLyric(lyric))
     },
     // 解析歌词
     parseLyric (text) {
@@ -43,17 +43,19 @@ export const mixin = {
         return [[0, text]]
       }
       // 去掉格式不正确的行
-      while (!pattern.test[lines[0]]) {
+      while (!pattern.test(lines[0])) {
         lines = lines.slice(1)
       }
       // 遍历每一行，形成一个带着两元素的数组，第一个元素是时间，第二个是歌词
       for (let item of lines) {
-        let time = item.match(pattern) // 存前面的时间段
-        let value = item.replace(pattern, '') // 存后面的歌词
-        for (let item1 of time) {
-          let t = item1.slice(1, -1).split(':') // 取出时间
-          if (value !== '') {
-            result.push(parseInt(t[0], 10) * 60 + parseFloat(t[1], value))
+        if (item) {
+          let time = item.match(pattern) // 存前面的时间段
+          let value = item.replace(pattern, '') // 存后面的歌词
+          for (let item1 of time) {
+            let t = item1.slice(1, -1).split(':') // 取出时间
+            if (value !== '') {
+              result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value])
+            }
           }
         }
       }
