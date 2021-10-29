@@ -3,7 +3,7 @@
   <h1 class="lyric-title">歌词</h1>
   <!-- 有歌词 -->
   <ul class="has-lyric" v-if="lyr.length">
-    <li v-for="(item, index) in lyr" :key="index">
+    <li v-for="(item, index) in lyr" :key="index" style="list-style-type:none;">
       {{item[1]}}
     </li>
   </ul>

@@ -29,7 +29,7 @@ export default {
   },
   mounted () {
     let that = this
-    document.addEventListener('click', function () {
+    document.querySelector('.home').addEventListener('click', function () {
       that.$store.commit('setShowAside', false)
     }, true)
   },

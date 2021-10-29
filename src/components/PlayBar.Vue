@@ -59,7 +59,7 @@
       </div>
       <!-- 播放列表 -->
       <div class="item">
-        <Icon type="ios-list" @click="changeAside" style="font-size:30px;margin-top:-10px;"></Icon>
+        <Icon type="ios-list" class="list" @click="changeAside" style="font-size:30px;margin-top:-10px;"></Icon>
       </div>
     </div>
   </div>
@@ -112,7 +112,8 @@ export default {
       'picUrl',
       'listIndex', // 当前歌曲在歌单中的位置
       'listOfSongs',
-      'autoNext'
+      'autoNext',
+      'showAside'
     ])
   },
   watch: {
@@ -256,7 +257,7 @@ export default {
     },
     // 显示播放中的歌曲列表
     changeAside () {
-      this.$store.commit('setShowAside', true)
+      this.$store.commit('setShowAside', !this.showAside)
     },
     // 上一首歌曲
     prev () {
