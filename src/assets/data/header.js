@@ -16,7 +16,7 @@ const navMsg = [{
 // 右侧导航栏
 const loginMsg = [{
   name: '登录',
-  path: '/loginin'
+  path: '/login'
 }, {
   name: '注册',
   path: '/signup'

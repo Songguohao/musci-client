@@ -6,6 +6,8 @@ import Singer from '@/pages/Singer'
 import SongList from '@/pages/SongList'
 import Search from '@/pages/Search'
 import Lyric from '@/pages/Lyric'
+import SignUp from '@/pages/SignUp'
+import Login from '@/pages/Login'
 
 Vue.use(Router)
 
@@ -47,6 +49,16 @@ export default new Router({
       path: '/lyric',
       name: 'lyric',
       component: Lyric
+    },
+    {
+      path: '/signUp',
+      name: 'signUp',
+      component: SignUp
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ]
 })

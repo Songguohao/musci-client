@@ -15,27 +15,38 @@
         </Button>
       </div>
     </Menu>
+    <!-- 登陆注册 -->
+    <Menu v-show="!loginIn" mode="horizontal" class="header-right">
+      <MenuItem v-for="item in loginMsg" :key="item.path" :name="item.name" @click.native="goPage(item.path, item.name)">
+        {{ item.name }}
+      </MenuItem>
+    </Menu>
   </div>
 </template>
 
 <script>
-import { navMsg } from '../assets/data/header.js'
+import { loginMsg, navMsg } from '../assets/data/header.js'
+import { mapGetters } from 'vuex'
 export default {
   name: 'TheHeader',
   data () {
     return {
-      activeName: '首页',
       navMsg: [],
-      keywords: ''
+      keywords: '',
+      loginMsg: []
     }
   },
   created () {
     this.navMsg = navMsg
-    this.activeName = this.$store.getters.activeName
+    this.loginMsg = loginMsg
   },
   mounted () {
   },
   computed: {
+    ...mapGetters([
+      'activeName',
+      'loginIn'
+    ])
   },
   methods: {
     goHome () {

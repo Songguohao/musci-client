@@ -50,13 +50,13 @@ export const listSongDetail = (songListId) => get(`listSong/detail?songListId=${
 
 // =============== 用户相关 =================
 
-// 添加歌手
-export const setConsumer = (params) => post(`consumer/add`, params)
+// 添加用户
+export const signUp = (params) => post(`consumer/add`, params)
 
-// 查询歌手
+// 查询用户
 export const getAllConsumer = () => get(`consumer/allConsumer`)
 
-// 根据歌手id查询歌手
+// 根据用户id查询用户
 export const getConsumer = (id) => get(`consumer/selectByPrimaryKey?id=${id}`)
 
 // 下载音乐

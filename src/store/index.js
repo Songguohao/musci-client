@@ -21,7 +21,8 @@ const store = new Vuex.Store({
     lyric: [], // 未处理的歌词
     tempList: {}, // 单个歌单信息
     listIndex: null, // 当前歌曲在歌单中的位置
-    volume: 100 // 音量
+    volume: 100, // 音量
+    loginIn: false // 用户是否已经登陆
   },
   getters: {
     isPlay: state => state.isPlay,
@@ -122,6 +123,13 @@ const store = new Vuex.Store({
         volume = JSON.parse(window.sessionStorage.getItem('volume'))
       }
       return volume
+    },
+    loginIn: state => {
+      let loginIn = state.loginIn
+      if (!loginIn) {
+        loginIn = JSON.parse(window.sessionStorage.getItem('loginIn'))
+      }
+      return loginIn
     }
   },
   mutations: {
@@ -183,6 +191,10 @@ const store = new Vuex.Store({
     setVolume: (state, volume) => {
       state.volume = volume
       window.sessionStorage.setItem('volume', JSON.stringify(volume))
+    },
+    setLoginIn: (state, loginIn) => {
+      state.loginIn = loginIn
+      window.sessionStorage.setItem('loginIn', JSON.stringify(loginIn))
     }
   }
 })

@@ -9,6 +9,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'iview/dist/styles/iview.css'
 import Vuex from 'vuex'
 import store from './store/index'
+import '@/assets/js/iconfont.js'
+import '@/assets/js/iconfont1.js'
+import '@/assets/js/iconfont2.js'
+import '@/assets/js/iconfont3.js'
 
 Vue.config.productionTip = false
 Vue.use(iView)
