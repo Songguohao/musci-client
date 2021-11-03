@@ -22,7 +22,10 @@ const store = new Vuex.Store({
     tempList: {}, // 单个歌单信息
     listIndex: null, // 当前歌曲在歌单中的位置
     volume: 100, // 音量
-    loginIn: false // 用户是否已经登陆
+    loginIn: false, // 用户是否已经登陆
+    userId: '', // 用户id
+    username: '', // 用户账号
+    avatar: '' // 用户头像
   },
   getters: {
     isPlay: state => state.isPlay,
@@ -130,6 +133,27 @@ const store = new Vuex.Store({
         loginIn = JSON.parse(window.sessionStorage.getItem('loginIn'))
       }
       return loginIn
+    },
+    userId: state => {
+      let userId = state.userId
+      if (!userId) {
+        userId = JSON.parse(window.sessionStorage.getItem('userId'))
+      }
+      return userId
+    },
+    username: state => {
+      let username = state.username
+      if (!username) {
+        username = JSON.parse(window.sessionStorage.getItem('username'))
+      }
+      return username
+    },
+    avatar: state => {
+      let avatar = state.avatar
+      if (!avatar) {
+        avatar = JSON.parse(window.sessionStorage.getItem('avatar'))
+      }
+      return avatar
     }
   },
   mutations: {
@@ -195,6 +219,18 @@ const store = new Vuex.Store({
     setLoginIn: (state, loginIn) => {
       state.loginIn = loginIn
       window.sessionStorage.setItem('loginIn', JSON.stringify(loginIn))
+    },
+    setUserId: (state, userId) => {
+      state.userId = userId
+      window.sessionStorage.setItem('userId', JSON.stringify(userId))
+    },
+    setUsername: (state, username) => {
+      state.username = username
+      window.sessionStorage.setItem('username', JSON.stringify(username))
+    },
+    setAvatar: (state, avatar) => {
+      state.avatar = avatar
+      window.sessionStorage.setItem('avatar', JSON.stringify(avatar))
     }
   }
 })

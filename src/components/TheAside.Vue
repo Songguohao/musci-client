@@ -29,9 +29,11 @@ export default {
   },
   mounted () {
     let that = this
-    document.querySelector('.home').addEventListener('click', function () {
-      that.$store.commit('setShowAside', false)
-    }, true)
+    if (that.showAside === true) {
+      document.querySelector('.home').addEventListener('click', function () {
+        that.$store.commit('setShowAside', false)
+      }, true)
+    }
   },
   components: {
 

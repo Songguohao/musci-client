@@ -59,6 +59,9 @@ export const getAllConsumer = () => get(`consumer/allConsumer`)
 // 根据用户id查询用户
 export const getConsumer = (id) => get(`consumer/selectByPrimaryKey?id=${id}`)
 
+// 登陆
+export const loginIn = (params) => post(`/consumer/login`, params)
+
 // 下载音乐
 export const download = (url) => axios({
   method: 'get',

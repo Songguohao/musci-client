@@ -21,11 +21,22 @@
         {{ item.name }}
       </MenuItem>
     </Menu>
+    <!-- 用户信息 -->
+    <div class="header-right" v-show="loginIn">
+      <div id="user">
+        <img :src="attachImageUrl(avatar)" />
+      </div>
+      <ul class="menu">
+        <li v-for="(item, index) in menuList" :key="index" @click="goMenuList(item.path)">
+          {{item.name}}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
-import { loginMsg, navMsg } from '../assets/data/header.js'
+import { loginMsg, navMsg, menuList } from '../assets/data/header.js'
 import { mapGetters } from 'vuex'
 export default {
   name: 'TheHeader',
@@ -33,19 +44,32 @@ export default {
     return {
       navMsg: [],
       keywords: '',
-      loginMsg: []
+      loginMsg: [],
+      menuList: [] // 用户下拉菜单
     }
   },
   created () {
     this.navMsg = navMsg
     this.loginMsg = loginMsg
+    this.menuList = menuList
   },
   mounted () {
+    document.querySelector('#user').addEventListener('click', function (e) {
+      document.querySelector('.menu').classList.add('show')
+      e.stopPropagation()
+    }, false)
+    document.querySelector('.menu').addEventListener('click', function (e) {
+      e.stopPropagation()
+    }, false)
+    document.addEventListener('click', function () {
+      document.querySelector('.menu').classList.remove('show')
+    })
   },
   computed: {
     ...mapGetters([
       'activeName',
-      'loginIn'
+      'loginIn',
+      'avatar'
     ])
   },
   methods: {
@@ -63,6 +87,18 @@ export default {
         this.$router.push({path: '/search', query: { keywords: this.keywords }})
       } else {
         this.$Message.error('您输入的内容为空')
+      }
+    },
+    // 获取图片地址
+    attachImageUrl (srcUrl) {
+      return srcUrl ? this.$store.state.HOST + srcUrl : '../assets/img/user.jpg'
+    },
+    goMenuList (path) {
+      if (path === 0) {
+        this.$store.commit('setLoginIn', false)
+        this.$router.go(0) // 刷新页面
+      } else {
+        this.$router.push({path: path})
       }
     }
   }

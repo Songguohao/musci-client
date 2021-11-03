@@ -8,6 +8,7 @@ import Search from '@/pages/Search'
 import Lyric from '@/pages/Lyric'
 import SignUp from '@/pages/SignUp'
 import Login from '@/pages/Login'
+import Setting from '@/pages/Setting'
 
 Vue.use(Router)
 
@@ -59,6 +60,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: Setting
     }
   ]
 })

@@ -38,7 +38,7 @@
         </el-form-item>
         <div class="login-btn">
           <el-button @click="goback(-1)">取消</el-button>
-          <el-button type="primary" @click="signUp">确定</el-button>
+          <el-button type="primary" @click="signUp" :loading="loading">确定</el-button>
         </div>
       </el-form>
     </div>
@@ -55,6 +55,7 @@ export default {
   mixins: [mixin],
   data () {
     return {
+      loading: false,
       registerForm: {
         username: '',
         password: '',
@@ -97,16 +98,19 @@ export default {
         'birth': datetime,
         'introduction': this.registerForm.introduction,
         'location': this.registerForm.location,
-        'avator': '/img/avatar/Favorites.png'
+        'avatar': '/img/avatar/Favorites.png'
       }
+      _this.loading = true
       signUp(params).then(res => {
         if (res.code === 1) {
           this.$Message.success('注册成功!2秒后自动跳转首页...')
+          _this.changeIndex('首页')
           setTimeout(function () {
+            _this.loading = false
             _this.$router.push({path: '/'})
           }, 2000)
         } else {
-          this.$Message.error('注册失败')
+          this.$Message.error(res.msg)
         }
       }).catch(err => {
         console.log(err)
@@ -115,6 +119,9 @@ export default {
     },
     goback (index) {
       this.$router.go(index)
+    },
+    changeIndex (value) {
+      this.$store.commit('setActiveName', value)
     }
   }
 }
