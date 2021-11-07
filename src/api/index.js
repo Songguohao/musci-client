@@ -44,9 +44,8 @@ export const setSongList = (params) => post(`songList/add`, params)
 // 查询歌单
 export const getAllSongList = () => get(`songList/allSongList`)
 
-// =============== 歌单歌曲相关 =================
-// 查询歌曲
-export const listSongDetail = (songListId) => get(`listSong/detail?songListId=${songListId}`)
+// 查询歌单歌曲详情
+export const getSongListDetail = (songListId) => get(`listSong/detail?songListId=${songListId}`)
 
 // =============== 用户相关 =================
 

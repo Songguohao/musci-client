@@ -35,6 +35,9 @@ export const mixin = {
     },
     // 解析歌词
     parseLyric (text) {
+      if (!text) {
+        return []
+      }
       let lines = text.split('\n')
       let pattern = /\[\d{2}:\d{2}.(\d{3}|\d{2})]/g
       let result = []

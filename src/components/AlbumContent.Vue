@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <h1 class="title">
-      <slot></slot>
+      <slot name="title"></slot>
     </h1>
     <ul style="text-align: center;">
       <li style="list-style-type:none;">
